@@ -1,13 +1,44 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./Login.css";
 import LoginPicture from "../../assets/login.png";
 import Logo from "../../assets/places/Logo.png";
 import { Link } from "react-router-dom";
-import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaWhatsapp,
+  FaEyeSlash,
+  FaEye,
+} from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillApple } from "react-icons/ai";
+import { AuthContext } from "../../Hooks/UserContext";
 
 const Login = () => {
+  const { logInUser } = useContext(AuthContext);
+  const [toggle, setToggle] = useState(false);
+
+  const [error, setError] = useState("");
+
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
+
+  const handleSignIn = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    logInUser(email, password)
+      .then((result) => {
+        form.reset();
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
+
   return (
     <>
       <div className="login-container">
@@ -36,7 +67,7 @@ const Login = () => {
                 </Link>{" "}
               </small>
             </p>
-            <form>
+            <form onSubmit={handleSignIn}>
               <small>Email:</small>
               <br />
               <input
@@ -51,28 +82,37 @@ const Login = () => {
               <br />
               <input
                 className="input-login"
-                type="password"
+                type={toggle ? "text" : "password"}
                 name="password"
                 placeholder="Enter Your Password"
               />
+              {
+                <span onClick={handleToggle} className="eye">
+                  {toggle ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              }
               <p className="mt-2"></p>
+              <div className="d-flex justify-content-between">
+                <div>
+                  <input type="checkbox" /> <small>Remember Me</small>
+                </div>
+                <div>
+                  <Link
+                    to="/forget"
+                    className="text-decoration-none text-black"
+                  >
+                    Forgot Password
+                  </Link>
+                </div>
+              </div>
+              <p className="text-center text-danger mt-2 fw-bold">{error ? error : ''}</p>
+              <div className="mt-4 d-flex justify-content-center">
+                <button type="submit" className="login-button">
+                  Login
+                </button>
+              </div>
             </form>
-            <div className="d-flex justify-content-between">
-              <div>
-                <input type="checkbox" /> <small>Remember Me</small>
-              </div>
-              <div>
-                <Link
-                  to="/forgotPassword"
-                  className="text-decoration-none text-black"
-                >
-                  Forgot Password
-                </Link>
-              </div>
-            </div>
-            <div className="mt-4 d-flex justify-content-center">
-              <button className="login-button">Login</button>
-            </div>
+
             <p className="mt-4 text-center">Or continue With</p>
             <div className="d-flex justify-content-center">
               <div>

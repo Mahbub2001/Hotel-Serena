@@ -1,12 +1,51 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import SignupPicture from "../../assets/signup.png";
 import Logo from "../../assets/places/Logo.png";
 import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillApple } from "react-icons/ai";
+import { AuthContext } from "../../Hooks/UserContext";
 
 const Signup = () => {
+  const { createUser, verifyEmail, updateName } = useContext(AuthContext);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    // console.log(name,email,password);
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        // console.log(user);
+        form.reset();
+
+        updateName(name)
+          .then((result) => {
+
+            verifyEmail()
+              .then((result) => {})
+
+              .catch((error) => {
+                console.error(error.message);
+              });
+
+          })
+          .catch((error) => {
+
+            console.error(error.message);
+
+          });
+      })
+      .catch((error) => {
+
+        console.error(error.message);
+        
+      });
+  };
   return (
     <>
       <div className="login-container">
@@ -35,7 +74,7 @@ const Signup = () => {
                 </Link>{" "}
               </small>
             </p>
-            <form>
+            <form onSubmit={handleSubmit}>
               <small>Email:</small>
               <br />
               <input
@@ -65,10 +104,13 @@ const Signup = () => {
                 placeholder="Enter Your Password"
               />
               <p className="mt-2"></p>
+              <div className="mt-4 d-flex justify-content-center">
+                <button type="submit" className="login-button">
+                  Register
+                </button>
+              </div>
             </form>
-            <div className="mt-4 d-flex justify-content-center">
-              <button className="login-button">Register</button>
-            </div>
+
             <p className="mt-4 text-center">Or continue With</p>
             <div className="d-flex justify-content-center">
               <div>

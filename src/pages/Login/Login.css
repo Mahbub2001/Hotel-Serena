@@ -43,6 +43,11 @@
     width:38rem ;
     height: 100%;
 }
+.eye{
+    position: absolute;
+    transform: translateY(20px);
+    cursor: pointer;
+}
 @media screen and (max-width:990px) {
     .login-container{
         min-height: 700px;
@@ -80,5 +85,8 @@
     }
     .image-login img{
         display: none;
+    }
+    .eye{
+        transform: translateY(0);
     }
 }
