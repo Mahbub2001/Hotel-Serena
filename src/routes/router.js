@@ -9,6 +9,7 @@ import Login from "../pages/Login/Login";
 import Packages from "../pages/Packages/Packages";
 import Profile from "../pages/profile/Profile";
 import Signup from "../pages/Signup/Signup";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:'/host',
-                element:<Host/>,
+                element:<PrivateRoute><Host/></PrivateRoute>,
             },
             {
                 path:'/experience',

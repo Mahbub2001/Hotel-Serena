@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./Login.css";
 import LoginPicture from "../../assets/login.png";
 import Logo from "../../assets/places/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaFacebook,
   FaTwitter,
@@ -17,7 +17,10 @@ import { AuthContext } from "../../Hooks/UserContext";
 const Login = () => {
   const { logInUser } = useContext(AuthContext);
   const [toggle, setToggle] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const from = location.state?.from?.pathname || '/';
   const [error, setError] = useState("");
 
   const handleToggle = () => {
@@ -33,6 +36,7 @@ const Login = () => {
     logInUser(email, password)
       .then((result) => {
         form.reset();
+        navigate(from,{replace:true});
       })
       .catch((error) => {
         setError(error.message);
